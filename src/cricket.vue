@@ -50,7 +50,7 @@ export default {
   components: {
     Dartboard
   },
-  props: ['playernames', 'targets'],
+  props: ['playernames', 'targets', 'safegame'],
   data: function() {
     return {
       turn: 0,

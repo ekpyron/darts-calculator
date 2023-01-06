@@ -33,7 +33,7 @@ export default {
   components: {
     Dartboard
   },
-  props: ['playernames'],
+  props: ['playernames', 'safegame'],
   data: function() {
     return {
       turn: 0,

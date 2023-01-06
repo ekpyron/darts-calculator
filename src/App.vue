@@ -7,6 +7,7 @@
       <div class="gamemode zero1" @click="game = 2; zero1score = 301">301</div>
       <div class="gamemode zero12" @click="game = 2; zero1score = 501">501</div>
       <div class="gamemode zero13" @click="game = 2; zero1score = 701">701</div>
+      <div v-if="hasSavegame == true" class="gamemode safegame" @click="loadSafegame()">Continue Last Game</div>
 
       <div class="highscore" v-if="shootoutScores.length > 0">
         <h3>Shootout highscores</h3>
@@ -35,9 +36,9 @@
       <div class="startgame" @click="gamestarted = true">Start game</div>
     </div>
     <div v-else>
-      <shootout v-if="game == 1" v-bind:playernames="players" v-on:saveScore="handleAddScore" v-on:gameover="reset"/>
-      <zero1 v-if="game == 2"  v-bind:playernames="players" :initialScore="zero1score" v-on:gameover="reset"/>
-      <cricket v-if="game == 3"  v-bind:playernames="players" v-on:gameover="reset" :targets="['15', '16', '17', '18', '19', '20', 'bull']" />
+      <shootout v-if="game == 1" v-bind:playernames="players" :safegame="safegame" v-on:saveScore="handleAddScore" v-on:gameover="reset"/>
+      <zero1 v-if="game == 2"  v-bind:playernames="players" :safegame="safegame" :initialScore="zero1score" v-on:saveGame="storeSafegame" v-on:gameover="reset"/>
+      <cricket v-if="game == 3"  v-bind:playernames="players" v-on:gameover="reset" :safegame="safegame" :targets="['15', '16', '17', '18', '19', '20', 'bull']" />
     </div>
   </div>
 </template>
@@ -62,6 +63,7 @@ export default {
       gamestarted: false,
       highscores: [],
       zero1score: 301,
+      safegame: null
     }
   },
   created() {
@@ -84,6 +86,11 @@ export default {
         this.gamestarted = true
       }
     }
+    if (localStorage.getItem('safegame')) {
+      this.hasSavegame = true
+    } else {
+      this.hasSavegame = false
+    }
   },
   computed: {
     shootoutScores: function() {
@@ -98,10 +105,27 @@ export default {
         localStorage.setItem('highscore', JSON.stringify([...scores, score]))
       }
     },
+    storeSafegame(data) {
+      const safegame = {
+        data: data,
+        game: this.game,
+        players: this.players,
+        gamestarted: this.gamestarted
+      }
+      localStorage.setItem('safegame', JSON.stringify(safegame))
+    },
     reset() {
       this.game = 0
       this.players = []
       this.gamestarted = false
+      this.safegame = null
+    },
+    loadSafegame() {
+      const safegame = JSON.parse(localStorage.getItem('safegame'))
+      this.game = safegame.game
+      this.players = safegame.players
+      this.gamestarted = safegame.gamestarted
+      this.safegame = safegame.data
     },
     setPlayers(count) {
       const players = []
@@ -135,6 +159,9 @@ export default {
 }
 .zero13 {
   background-color: #FB4D3D
+}
+.safegame {
+  background-color: #000000
 }
 .playercount > div:nth-child(1) {
   background-color: #FB4D3D

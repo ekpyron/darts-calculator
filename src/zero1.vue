@@ -31,7 +31,7 @@ export default {
   components: {
     Dartboard
   },
-  props: ['playernames', 'initialScore'],
+  props: ['playernames', 'initialScore', 'safegame'],
   data: function() {
     return {
       turn: 0,
@@ -68,16 +68,31 @@ export default {
   },
   methods: {
     init() {
-      this.gameover = false
-      this.playerchange = false
-      this.record = []
-      this.currentround = 1
-      this.turn = 0
-      this.players = this.playernames.map(name => ({
-        name,
-        score: this.initialScore || 301,
-        throws: [],
-      }))
+      if (this.safegame) {
+        this.gameover = this.safegame.gameover
+        this.playerchange = this.safegame.playerchange
+        this.record = this.safegame.record
+        this.currentround = this.safegame.currentround
+        this.turn = this.safegame.turn
+        this.players = this.safegame.players
+        this.highlight(this.players[this.turn].score)
+      } else {
+        this.gameover = false
+        this.playerchange = false
+        this.record = []
+        this.currentround = 1
+        this.turn = 0
+        this.players = this.playernames.map(name => ({
+          name,
+          score: this.initialScore || 301,
+          throws: [],
+        }))
+      }
+    },
+    getSafegame() {
+      return {
+        players: this.players, gameover: this.gameover, playerchange: this.playerchange, record: this.record, currentround: this.currentround, turn: this.turn
+      }
     },
     highlight(target) {
       document.querySelectorAll('.bull,.a20,.a19,.a18,.a17,.a16,.a15,.a14,.a13,.a12,.a11,.a10,.a9,.a8,.a7,.a6,.a5,.a4,.a3,.a2,.a1')
@@ -126,21 +141,20 @@ export default {
 
         this.record.push('bust')
         this.playerchange = true
-        return
       }
 
       if (player.throws.length % 3 == 0) {
-        
+
         if (this.turn + 1 === this.players.length && this.currentround === this.roundLimit) {
           this.gameover = true
           this.playerchange = false
-          return
         } else {
           this.playerchange = true
         }
       }
 
       this.highlight(this.players[this.turn].score)
+      this.$emit('saveGame', this.getSafegame())
     },
     calculateValue(target) {
       if (target === null) {
@@ -165,6 +179,7 @@ export default {
       this.turn = (this.turn + 1) % this.players.length
       this.record = []
       this.highlight(this.players[this.turn].score)
+      this.$emit('saveGame', this.getSafegame())
     },
     undo() {
       const player = this.players[this.turn]
@@ -175,6 +190,7 @@ export default {
       this.record = []
       this.playerchange = false
       this.highlight(this.players[this.turn].score)
+      this.$emit('saveGame', this.getSafegame())
     },
     goToMenu() {
       this.$emit('gameover')
