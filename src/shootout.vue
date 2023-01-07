@@ -21,7 +21,7 @@
     <div v-if="playerchange" class="playerchange" @click="changeplayer">Player change</div>
     <div v-if="gameover" class="gameover">
       <div class="mainmenu" @click="goToMenu">Main menu</div>
-      <div class="playagain" @click="init">Play again</div>
+      <div class="playagain" @click="playagain">Play again</div>
     </div>
   </div>
 </template>
@@ -72,6 +72,11 @@ export default {
     }
   },
   methods: {
+    playagain() {
+      this.safegame = null
+      this.init()
+      this.$emit('saveGame', null)
+    },
     init() {
       if (this.safegame) {
         this.gameover = this.safegame.gameover

@@ -106,13 +106,17 @@ export default {
       }
     },
     storeSafegame(data) {
-      const safegame = {
-        data: data,
-        game: this.game,
-        players: this.players,
-        gamestarted: this.gamestarted
+      if (data) {
+        const safegame = {
+          data: data,
+          game: this.game,
+          players: this.players,
+          gamestarted: this.gamestarted
+        }
+        localStorage.setItem('safegame', JSON.stringify(safegame))
+      } else {
+        localStorage.removeItem('safegame');
       }
-      localStorage.setItem('safegame', JSON.stringify(safegame))
     },
     reset() {
       this.game = 0
