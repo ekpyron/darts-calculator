@@ -92,24 +92,38 @@ export default {
 
       const targets = this.targets.reduce((all, next) => ({...all, [next]: 0 }), {})
 
-      this.gameover = false
-      this.playerchange = false
-      this.record = []
-      this.currentround = 1
-      this.turn = 0
-      this.players = this.playernames.map(name => ({
-        name,
-        finished: false,
-        score: {
-          points: 0,
-          ...targets
-        },
-        throws: [],
-      }))
-      
+      if (this.safegame) {
+        this.gameover = this.safegame.gameover
+        this.playerchange = this.safegame.playerchange
+        this.record = this.safegame.record
+        this.currentround = this.safegame.currentround
+        this.turn = this.safegame.turn
+        this.players = this.safegame.players
+      } else {
+        this.gameover = false
+        this.playerchange = false
+        this.record = []
+        this.currentround = 1
+        this.turn = 0
+        this.players = this.playernames.map(name => ({
+          name,
+          finished: false,
+          score: {
+            points: 0,
+            ...targets
+          },
+          throws: [],
+        }))
+      }
+
       setTimeout(() => {
         this.highlight()
       }, 10)
+    },
+    getSafegame() {
+      return {
+      players: this.players, gameover: this.gameover, playerchange: this.playerchange, record: this.record, currentround: this.currentround, turn: this.turn
+      }
     },
     highlight() {
       const player = this.players[this.turn]
@@ -192,6 +206,7 @@ export default {
       }
 
       this.highlight()
+      this.$emit('saveGame', this.getSafegame())
     },
     calculateValue(target) {
       if (target === null) {
@@ -218,6 +233,7 @@ export default {
       this.record = []
 
       this.highlight()
+      this.$emit('saveGame', this.getSafegame())
     },
     goToMenu() {
       this.$emit('gameover')

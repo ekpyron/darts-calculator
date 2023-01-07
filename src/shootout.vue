@@ -73,19 +73,32 @@ export default {
   },
   methods: {
     init() {
-      this.gameover = false
-      this.record = []
-      this.currentround = 1
-      this.turn = 0
-      this.players = this.playernames.map(name => ({
-        name,
-        score: 0,
-        throws: [],
-        multiplier: 1
-      }))
+      if (this.safegame) {
+        this.gameover = this.safegame.gameover
+        this.record = this.safegame.record
+        this.currentround = this.safegame.currentround
+        this.turn = this.safegame.turn
+        this.players = this.safegame.players
+      } else {
+        this.gameover = false
+        this.record = []
+        this.currentround = 1
+        this.turn = 0
+        this.players = this.playernames.map(name => ({
+          name,
+          score: 0,
+          throws: [],
+          multiplier: 1
+        }))
+      }
       setTimeout(() => {
         this.highlight(this.players[this.turn].throws)
       }, 10)
+    },
+    getSafegame() {
+      return {
+      players: this.players, gameover: this.gameover, record: this.record, currentround: this.currentround, turn: this.turn
+      }
     },
     highlight(throws) {
       document.querySelectorAll('.bull,.a20,.a19,.a18,.a17,.a16,.a15,.a14,.a13,.a12,.a11,.a10,.a9,.a8,.a7,.a6,.a5,.a4,.a3,.a2,.a1')
@@ -123,6 +136,7 @@ export default {
       }
 
       this.highlight(this.players[this.turn].throws)
+      this.$emit('saveGame', this.getSafegame())
     },
     calculateValue(target) {
       if (target === null) {
@@ -148,6 +162,7 @@ export default {
       this.turn = (this.turn + 1) % this.players.length
       this.record = []
       this.highlight(this.players[this.turn].throws)
+      this.$emit('saveGame', this.getSafegame())
     },
     goToMenu() {
       this.$emit('gameover')

@@ -36,9 +36,9 @@
       <div class="startgame" @click="gamestarted = true">Start game</div>
     </div>
     <div v-else>
-      <shootout v-if="game == 1" v-bind:playernames="players" :safegame="safegame" v-on:saveScore="handleAddScore" v-on:gameover="reset"/>
+      <shootout v-if="game == 1" v-bind:playernames="players" :safegame="safegame" v-on:saveScore="handleAddScore" v-on:saveGame="storeSafegame"  v-on:gameover="reset"/>
       <zero1 v-if="game == 2"  v-bind:playernames="players" :safegame="safegame" :initialScore="zero1score" v-on:saveGame="storeSafegame" v-on:gameover="reset"/>
-      <cricket v-if="game == 3"  v-bind:playernames="players" v-on:gameover="reset" :safegame="safegame" :targets="['15', '16', '17', '18', '19', '20', 'bull']" />
+      <cricket v-if="game == 3"  v-bind:playernames="players" v-on:gameover="reset" :safegame="safegame" v-on:saveGame="storeSafegame" :targets="['15', '16', '17', '18', '19', '20', 'bull']" />
     </div>
   </div>
 </template>
