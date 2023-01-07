@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <svg viewBox="0 0 470 470" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="svg2" sodipodi:version="0.32" inkscape:version="0.43" sodipodi:docbase="/home/tijmen-gentoo/Images/Graphics Tijmen/SVG" sodipodi:docname="Dartboard.svg" version="1.0">
+  <svg viewBox="0 0 470 470" preserveAspectRatio="xMidYMid meet" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="svg2" sodipodi:version="0.32" inkscape:version="0.43" sodipodi:docbase="/home/tijmen-gentoo/Images/Graphics Tijmen/SVG" sodipodi:docname="Dartboard.svg" version="1.0">
     <defs id="defs4">
       <marker inkscape:stockid="Arrow2Send" orient="auto" refY="0" refX="0" id="Arrow2Send" style="overflow:visible">
         <path id="path9898" style="font-size:12px;fill:#62adff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round" d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.97309,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z " transform="matrix(-0.3,0,0,-0.3,1.5,0)"/>
@@ -176,12 +176,14 @@
       </g>
     </g>
   </svg>
-  <div class="confirm" v-if="hit && !disabled">
-    <div class="number">{{ hit }}</div>
-    <div class="button miss" @click="handleConfirmation(null)">miss</div>
-    <div class="button close" @click="hit = null">x</div>
-    <div :class="'button option option' + option" v-for="option in options" v-bind:key="option" @click="handleConfirmation(option)">
-      {{ option }}
+  <div class="confirmcontainer" v-if="hit && !disabled">
+    <div class="confirm">
+      <div class="number">{{ hit }}</div>
+      <div class="button miss" @click="handleConfirmation(null)">miss</div>
+      <div class="button close" @click="hit = null">x</div>
+      <div :class="'button option option' + option" v-for="option in options" v-bind:key="option" @click="handleConfirmation(option)">
+        {{ option }}
+      </div>
     </div>
   </div>
 </div>
@@ -237,15 +239,30 @@ export default {
 
 <style scoped>
   .container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    place-items: center center;
-    border-top: none;
-  }
-  .confirm, svg {
+    position: relative;
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 100%;
+  }
+  svg {
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 100%;
+  }
+  .confirmcontainer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .confirm {
     background-color: black;

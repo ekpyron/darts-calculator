@@ -1,5 +1,6 @@
 <template>
-  <div id="shootout">
+  <div class="game">
+  <div class="header">
     <h2 class="rounds">{{ this.currentround }}/{{ this.roundLimit }}</h2>
     <div class="head">
       <table class="crickettable">
@@ -11,7 +12,7 @@
             </td>
           </tr>
         </thead>
-        <tr v-for="t in targets" v-bind:key="t">
+        <tr v-for="t in targets" v-bind:key="t" style="line-height: 1em">
           <td class="targetD">{{ t }}</td>
           <td v-for="(player, index) in players" v-bind:key="player.name" :class="{ playerd: index + 1 < players.length }">
             <span v-if="player.score[t] === 0"></span>
@@ -33,12 +34,13 @@
         <div>{{ record[2] | totext }}</div>
       </div>
     </div>
+    </div>
+    <Dartboard v-on:hit="handleDartHit" :disabled="playerchange || gameover"/>
     <div v-if="playerchange" class="playerchange" @click="changeplayer">Player change</div>
     <div v-if="gameover" class="gameover">
       <div class="mainmenu" @click="goToMenu">Main menu</div>
       <div class="playagain" @click="init">Play again</div>
     </div>
-    <Dartboard v-on:hit="handleDartHit" :disabled="playerchange || gameover"/>
   </div>
 </template>
 
@@ -225,7 +227,6 @@ export default {
 </script>
 
 <style scoped>
-#shootout { display: relative }
 .head {
   display: grid;
   grid-template-columns: 2fr 1fr;

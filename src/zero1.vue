@@ -1,5 +1,6 @@
 <template>
-  <div id="shootout">
+  <div class="game">
+    <div class="header">
     <div class="head">
       <h2>{{ this.currentround }}/{{ this.roundLimit }}</h2>
       <div class="record">
@@ -14,12 +15,13 @@
         <span class="score">{{ player.score }}</span>
       </div>
     </div>
+    </div>
+    <Dartboard v-on:hit="handleDartHit" :disabled="playerchange || gameover"/>
     <div v-if="playerchange" class="playerchange" @click="changeplayer">Player change</div>
     <div v-if="gameover" class="gameover">
       <div class="mainmenu" @click="goToMenu">Main menu</div>
       <div class="playagain" @click="init">Play again</div>
     </div>
-    <Dartboard v-on:hit="handleDartHit" :disabled="playerchange || gameover"/>
   </div>
 </template>
 
@@ -200,14 +202,12 @@ export default {
 </script>
 
 <style scoped>
-#shootout { display: relative }
 .head {
   display: grid;
   grid-template-columns: 2fr 1fr;
   place-items: center;
   border-bottom: 4px solid black;
 }
-
 .players {
   display: flex;
   color: white;
