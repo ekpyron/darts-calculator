@@ -77,7 +77,9 @@ export default {
         this.currentround = this.safegame.currentround
         this.turn = this.safegame.turn
         this.players = this.safegame.players
-        this.highlight(this.players[this.turn].score)
+        setTimeout(() => {
+          this.highlight(this.players[this.turn].score)
+        }, 10)
       } else {
         this.gameover = false
         this.playerchange = false

@@ -7,7 +7,7 @@
       <div class="gamemode zero1" @click="game = 2; zero1score = 301">301</div>
       <div class="gamemode zero12" @click="game = 2; zero1score = 501">501</div>
       <div class="gamemode zero13" @click="game = 2; zero1score = 701">701</div>
-      <div v-if="hasSavegame == true" class="gamemode safegame" @click="loadSafegame()">Continue Last Game</div>
+      <div v-if="hasSafegame == true" class="gamemode safegame" @click="loadSafegame()">Continue Last Game</div>
 
       <div class="highscore" v-if="shootoutScores.length > 0">
         <h3>Shootout highscores</h3>
@@ -87,9 +87,9 @@ export default {
       }
     }
     if (localStorage.getItem('safegame')) {
-      this.hasSavegame = true
+      this.hasSafegame = true
     } else {
-      this.hasSavegame = false
+      this.hasSafegame = false
     }
   },
   computed: {
@@ -118,7 +118,8 @@ export default {
       this.game = 0
       this.players = []
       this.gamestarted = false
-      this.safegame = null
+      localStorage.removeItem('safegame');
+      this.hasSafegame = false
     },
     loadSafegame() {
       const safegame = JSON.parse(localStorage.getItem('safegame'))
