@@ -52,7 +52,7 @@ export default {
   components: {
     Dartboard
   },
-  props: ['playernames', 'targets', 'safegame'],
+  props: ['playernames', 'targets', 'savegame'],
   data: function() {
     return {
       turn: 0,
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     playagain() {
-      this.safegame = null
+      this.savegame = null
       this.init()
       this.$emit('saveGame', null)
     },
@@ -97,13 +97,13 @@ export default {
 
       const targets = this.targets.reduce((all, next) => ({...all, [next]: 0 }), {})
 
-      if (this.safegame) {
-        this.gameover = this.safegame.gameover
-        this.playerchange = this.safegame.playerchange
-        this.record = this.safegame.record
-        this.currentround = this.safegame.currentround
-        this.turn = this.safegame.turn
-        this.players = this.safegame.players
+      if (this.savegame) {
+        this.gameover = this.savegame.gameover
+        this.playerchange = this.savegame.playerchange
+        this.record = this.savegame.record
+        this.currentround = this.savegame.currentround
+        this.turn = this.savegame.turn
+        this.players = this.savegame.players
       } else {
         this.gameover = false
         this.playerchange = false
@@ -125,7 +125,7 @@ export default {
         this.highlight()
       }, 10)
     },
-    getSafegame() {
+    getSavegame() {
       return {
       players: this.players, gameover: this.gameover, playerchange: this.playerchange, record: this.record, currentround: this.currentround, turn: this.turn
       }
@@ -211,7 +211,7 @@ export default {
       }
 
       this.highlight()
-      this.$emit('saveGame', this.getSafegame())
+      this.$emit('saveGame', this.getSavegame())
     },
     calculateValue(target) {
       if (target === null) {
@@ -238,7 +238,7 @@ export default {
       this.record = []
 
       this.highlight()
-      this.$emit('saveGame', this.getSafegame())
+      this.$emit('saveGame', this.getSavegame())
     },
     goToMenu() {
       this.$emit('gameover')

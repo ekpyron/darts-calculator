@@ -35,7 +35,7 @@ export default {
   components: {
     Dartboard
   },
-  props: ['playernames', 'safegame'],
+  props: ['playernames', 'savegame'],
   data: function() {
     return {
       turn: 0,
@@ -73,17 +73,17 @@ export default {
   },
   methods: {
     playagain() {
-      this.safegame = null
+      this.savegame = null
       this.init()
       this.$emit('saveGame', null)
     },
     init() {
-      if (this.safegame) {
-        this.gameover = this.safegame.gameover
-        this.record = this.safegame.record
-        this.currentround = this.safegame.currentround
-        this.turn = this.safegame.turn
-        this.players = this.safegame.players
+      if (this.savegame) {
+        this.gameover = this.savegame.gameover
+        this.record = this.savegame.record
+        this.currentround = this.savegame.currentround
+        this.turn = this.savegame.turn
+        this.players = this.savegame.players
       } else {
         this.gameover = false
         this.record = []
@@ -100,7 +100,7 @@ export default {
         this.highlight(this.players[this.turn].throws)
       }, 10)
     },
-    getSafegame() {
+    getSavegame() {
       return {
       players: this.players, gameover: this.gameover, record: this.record, currentround: this.currentround, turn: this.turn
       }
@@ -141,7 +141,7 @@ export default {
       }
 
       this.highlight(this.players[this.turn].throws)
-      this.$emit('saveGame', this.getSafegame())
+      this.$emit('saveGame', this.getSavegame())
     },
     calculateValue(target) {
       if (target === null) {
@@ -167,7 +167,7 @@ export default {
       this.turn = (this.turn + 1) % this.players.length
       this.record = []
       this.highlight(this.players[this.turn].throws)
-      this.$emit('saveGame', this.getSafegame())
+      this.$emit('saveGame', this.getSavegame())
     },
     goToMenu() {
       this.$emit('gameover')
